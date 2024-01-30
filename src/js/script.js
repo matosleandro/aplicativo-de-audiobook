@@ -1,12 +1,18 @@
 const botaoPlayPause = document.getElementById('play-pause');
 const botaoAvancar = document.getElementById('proximo');
 const botaoVoltar = document.getElementById('anterior');
+const botaoRepetir = document.getElementById('repetir');
+const botaoAleatorio = document.getElementById('aleatorio');
 const nomeCapitulo = document.getElementById('capitulo');
 const audioCapitulo = document.getElementById('audio-capitulo');
+const barraProgresso = document.getElementById('barra-progresso');
+const tempoAtual = document.getElementById('tempo-atual');
+const tempoTotal = document.getElementById('tempo-total');
 
 const numeroCapitulos = 10;
 let taTocando = 0;
 let capituloAtual = 1;
+let repetir = false;
 
 function tocarFaixa() {
     audioCapitulo.play();
@@ -20,7 +26,7 @@ function pausarFaixa() {
 }
 // Função para tocar ou pausar a faixa de audio
 function tocarOuPausar() {
-    if ( taTocando === 0) {
+    if (taTocando === 0) {
         tocarFaixa();
         taTocando = 1;
     } else {
@@ -31,6 +37,21 @@ function tocarOuPausar() {
 // Função para voltar para a faixa anterior
 function trocarNomeFaixa () {
     nomeCapitulo.innerText = 'Capítulo ' + capituloAtual;
+}
+// função para a barra de progresso da faixa
+function atualizarBarraProgresso() {
+    const porcentagem = (audioCapitulo.currentTime / audioCapitulo.duration) * 100;
+    barraProgresso.style.width = porcentagem + '%';
+
+    // Atualiza o tempo atual
+    const tempoAtualMinutos = Math.floor(audioCapitulo.currentTime / 60);
+    const tempoAtualSegundos = Math.floor(audioCapitulo.currentTime % 60);
+    tempoAtual.innerText = `${tempoAtualMinutos}:${tempoAtualSegundos}`;
+
+    // Atualiza o tempo total
+    const tempoTotalMinutos = Math.floor(audioCapitulo.duration / 60);
+    const tempoTotalSegundos = Math.floor(audioCapitulo.duration % 60);
+    tempoTotal.innerText = `${tempoTotalMinutos}:${tempoTotalSegundos}`;
 }
 // Função para avançar de faixa
 function proximaFaixa() {
@@ -44,6 +65,10 @@ function proximaFaixa() {
     tocarFaixa();
     taTocando = 1;
     trocarNomeFaixa();
+
+    if (repetir) {
+        audioCapitulo.addEventListener('ended', proximaFaixa);
+    }
 }
 // Função para voltar para a faixa anterior
 function voltarFaixa() {
@@ -58,7 +83,32 @@ function voltarFaixa() {
     taTocando = 1;
     trocarNomeFaixa();
 }
+// Função para repetir a faixa continuamente
+function alternarRepeticao() {
+    repetir = !repetir;
+    if (repetir) {
+        botaoRepetir.classList.add('ativo');
+    } else {
+        botaoRepetir.classList.remove('ativo');
+    }
+}
+// Função para tocar aleatoriamente as faixas
+function tocarAleatoriamente() {
+    const novoCapitulo = Math.floor(Math.random() * numeroCapitulos) + 1;
+    capituloAtual = novoCapitulo;
+    audioCapitulo.src = './src/books/dom-casmurro/' + capituloAtual + '.mp3';
+    tocarFaixa();
+    taTocando = 1;
+    trocarNomeFaixa();
+
+    if (repetir) {
+        audioCapitulo.addEventListener('ended', tocarAleatoriamente);
+    }
+}
 
 botaoPlayPause.addEventListener('click', tocarOuPausar);
 botaoAvancar.addEventListener('click', proximaFaixa);
 botaoVoltar.addEventListener('click', voltarFaixa);
+botaoRepetir.addEventListener('click', alternarRepeticao);
+botaoAleatorio.addEventListener('click', tocarAleatoriamente);
+audioCapitulo.addEventListener('timeupdate', atualizarBarraProgresso);

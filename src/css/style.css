@@ -36,7 +36,7 @@ button {
 }
 
 
-#anterior, #proximo, #repetir, #aleatorio {
+#anterior, #proximo, #repetir, #aleatorio, #barra-progresso {
   font-size: 3rem;
 }
 
@@ -48,4 +48,8 @@ button {
   width: 100%;
   display: flex;
   justify-content: space-around;
+}
+
+#repetir.ativo {
+  color: #1124ce;
 }

@@ -16,11 +16,19 @@
             <p id="nome-autor">Machado de Assis</p>
         </div>
         <audio id="audio-capitulo" src="./src/books/dom-casmurro/1.mp3"></audio>
+        <div>
+            <div id="barra-progresso-container">
+                <div id="barra-progresso"></div>
+            </div>
+            <div>
+                <span id="tempo-atual">0:00</span> / <span id="tempo-total">0:00</span>
+            </div>
+        </div>
         <div id="container-botoes">
             <button id="anterior" class="bi bi-skip-backward-fill"></button>
             <button id="play-pause" class="bi bi-play-fill"></button>
             <button id="proximo" class="bi bi-skip-forward-fill"></button>
-            <button id="repetir" class="bi bi-repeat-1"></button>
+            <button id="repetir" class="bi bi-repeat"></button>
             <button id="aleatorio" class="bi bi-shuffle"></button>
         </div>
     </div>
