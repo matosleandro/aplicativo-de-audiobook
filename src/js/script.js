@@ -1,6 +1,7 @@
 const botaoPlayPause = document.getElementById('play-pause');
 const botaoAvancar = document.getElementById('proximo');
 const botaoVoltar = document.getElementById('anterior');
+const botaoAcelerar = document.getElementById('acelerar');
 const botaoRepetir = document.getElementById('repetir');
 const botaoAleatorio = document.getElementById('aleatorio');
 const nomeCapitulo = document.getElementById('capitulo');
@@ -83,11 +84,16 @@ function voltarFaixa() {
     taTocando = 1;
     trocarNomeFaixa();
 }
+ // Aumenta a taxa de reprodução em 0.1
+function acelerarFaixa() {
+    audioCapitulo.playbackRate += 0.1;
+}
 // Função para repetir a faixa continuamente
 function alternarRepeticao() {
     repetir = !repetir;
     if (repetir) {
         botaoRepetir.classList.add('ativo');
+        tocarFaixa();
     } else {
         botaoRepetir.classList.remove('ativo');
     }
@@ -104,11 +110,19 @@ function tocarAleatoriamente() {
     if (repetir) {
         audioCapitulo.addEventListener('ended', tocarAleatoriamente);
     }
+
+    if (tocarAleatoriamente) {
+        botaoAleatorio.classList.add('ativo');
+        tocarFaixa();
+    } else {
+        botaoAleatorio.classList.remove('ativo');
+    }
 }
 
 botaoPlayPause.addEventListener('click', tocarOuPausar);
 botaoAvancar.addEventListener('click', proximaFaixa);
 botaoVoltar.addEventListener('click', voltarFaixa);
+botaoAcelerar.addEventListener('click', acelerarFaixa);
 botaoRepetir.addEventListener('click', alternarRepeticao);
 botaoAleatorio.addEventListener('click', tocarAleatoriamente);
 audioCapitulo.addEventListener('timeupdate', atualizarBarraProgresso);
